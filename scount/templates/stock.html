@@ -1,0 +1,386 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/02312187f3.js" crossorigin="anonymous"></script>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div class="topbartitle">
+            <h1>Stock Count</h1>
+            <!--
+            <div class="notificaitonbell" id="myBtn">
+                <i class="fa-solid fa-bell"></i>
+                <p>1</p>
+            </div>
+            !-->    
+        
+                <div class="mobileburger">
+                    <a href="javascript:void(0);" class="icon" onclick="openMobNav()">
+                        <i class="fa-solid fa-bars"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mobileburgerlinks">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'request' %}">Request</a>
+        <a href="{% url 'stock' %}">Stock List</a>
+        <a href="{% url 'log' %}">Log</a>
+        <a href="{% url 'tools' %}">Tools</a>
+        <a href="{% url 'settings' %}">Settings</a>
+        <a href="{% url 'signout' %}">Sign Out</a>
+    </div>
+
+    <div class="sidebar">
+        <nav class="sidenav">
+            <ul>
+                <div>
+                    <a href="{% url 'home' %}">
+                        <li>
+                            <div class="sidebarcontainer">
+                                <div class="listicon">
+                                    <i class="fa-solid fa-house"></i>
+                                </div>
+                                <div class="listtext">
+                                    Home
+                                </div>
+                            </div>
+                        </li>
+                    </a>
+
+                    <a href="{% url 'request' %}">
+                        <li>
+                            <div class="sidebarcontainer">
+                                <div class="listicon">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                </div>
+                                <div class="listtext">
+                                    Request
+                                </div>
+                            </div>
+                        </li>
+                    </a>
+
+                    <a href="{% url 'stock' %}">
+                        <li>
+                            <div class="sidebarcontainer">
+                                <div class="listicon">
+                                    <i class="fa-solid fa-box"></i>
+                                </div>
+                                <div class="listtext">
+                                    Stock List
+                                </div>
+                            </div>
+                        </li>
+                    </a>
+
+
+                    <a href="{% url 'log' %}">
+                        <li>
+                            <div class="sidebarcontainer">
+                                <div class="listicon">
+                                    <i class="fa-solid fa-eye"></i>
+                                </div>
+                                <div class="listtext">
+                                    Log
+                                </div>
+                            </div>
+                        </li>
+                    </a>
+
+                    <a href="{% url 'tools' %}">
+                        <li>
+                            <div class="sidebarcontainer">
+                                <div class="listicon">
+                                    <i class="fa-solid fa-wrench"></i>
+                                </div>
+                                <div class="listtext">
+                                    Tools
+                                </div>
+                            </div>
+                        </li>
+                    </a>
+                </div>
+
+                <div>
+                <a href="{% url 'settings' %}">
+                    <li class="bottom">
+                        <div class="sidebarcontainer">
+                            <div class="listicon">
+                                <i class="fa-solid fa-gear"></i>
+                            </div>
+                            <div class="listtext">
+                                Settings
+                            </div>
+                        </div>
+                    </li>
+                </a>
+
+                <a href="{% url 'signout' %}">
+                    <li class="bottom">
+                        <div class="sidebarcontainer">
+                            <div class="listicon">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div class="listtext">
+                                Sign Out
+                            </div>
+                        </div>
+                    </li>
+                </a>
+
+                </div>
+
+            </ul>
+
+        </nav>
+    </div>
+
+    <div class="row">
+
+        <div class="maintitle">
+
+            <h2>Home</h2>
+
+        </div>
+
+        <div class="container">
+
+            <div class="singleinsidecontainer">
+                <h3>Current Stock</h3>
+
+                <div class="tablescroll">
+                  <div class="tablesize">
+                    
+                    <table>
+
+                      <tr>
+                        <th>Stock Item</th>
+                        <th>Stock Quantity</th>
+                        <th>Action</th>
+                      </tr>
+                    
+                      {% for x in stock_count_table %}
+                    
+                      <tr>
+                    
+                        <td>
+                    
+                          <form action="updatestockname/{{ x.id }}" method="POST" style="width: 10em; text-align: center;" data-bs-theme="dark">
+                          {% csrf_token %}
+                          <input name="stock_item" class="form-control" value="{{ x.stock_item }}" style="border: none;">
+                          </form>
+                    
+                        </td>
+                    
+                        <td>
+                    
+                          <form action="updatequantity/{{ x.id }}" method="POST" style="width: 10em; text-align: center;" data-bs-theme="dark">
+                          {% csrf_token %}
+                          <input type="number" name="stock_item_quantity" class="form-control" value="{{ x.stock_item_quantity }}" style="border: none;">
+                          </form>
+                    
+                        </td>
+                    
+                        <td>
+
+                          <div class="tooltip">
+                            <a href="delete/{{ x.id }}"><i class="fa-solid fa-circle-xmark" style="color: red; text-align: right;"></i></a>
+                            <span class="tooltiptext">Delete</span>
+                          </div>
+                    
+                    
+                        </td>
+                    
+                      </tr>
+
+                      {% empty %}
+                      <td colspan="3">Nothing is in stock</td>
+                    
+                      {% endfor %}
+                    
+                    </table>
+
+                  </div>
+                </div>
+            </div>
+
+            <div class="singleinsidecontainer">
+
+                <h3>Requests For Action</h3>
+
+                <div class="tablescroll">
+                    <div class="tablesize">
+                      <table>
+
+                        <tr>
+          
+                          <th>Date Requested</th>
+                          <th>Requester</th>
+                          <th>Equipment Requested</th>
+                          <th>Quantity Requested</th>
+                          <th>Status</th>
+                          <th>Action</th>
+                      
+                        </tr>
+                      
+                        {% for x in stock_request_table %}
+                      
+                        <tr>
+                
+                          <td>
+                            {{ x.request_date }}
+                          </td>
+                      
+                          <td>
+                            {{ x.request_requestor }}
+                          </td>
+                      
+                          <td>
+                            {{ x.request_item }}
+                          </td>
+                      
+                          <td>
+                            {{ x.request_quantity }}
+                          </td>
+                
+                          <td>
+                            {{ x.request_status }}
+                          </td>
+                      
+                          <td>
+                            {% if x.request_status == "Pending" %}
+
+                            <div class="tooltip">
+                              <a id="myBtn" href="#" onclick="return false;"><i class="fa-solid fa-circle-check" style="color: rgb(0, 255, 98); text-align: right;"></i></a>
+                              <span class="tooltiptext">Approve</span>
+                            </div>
+
+                            <div id="myModal" class="modal">
+
+                              <!-- Modal content -->
+                              <div class="modal-content">
+                                <button class="form-button" type="button" onclick="location.href='approveinstock/{{ x.id }}'">Item is in stock in the office</button>
+                                <button class="form-button" type="button" onclick="location.href='approve/{{ x.id }}'">Item needs to be ordered</button>
+                              </div>
+                            
+                            </div>
+                
+
+                            <div class="tooltip">
+                              <a id="myBtn2" href="#" onclick="return false;"><i class="fa-solid fa-circle-xmark" style="color:red; text-align: right;"></i></a>
+                              <span class="tooltiptext">Reject</span>
+                            </div>
+
+                            <div id="myModal2" class="modal">
+
+                              <!-- Modal content -->
+                              <div class="modal-content">
+                                <h4>Please input reason for rejecting - this will be shown to user</h4>
+                                <form action="reject/{{ x.id }}" method="POST">
+                                  {% csrf_token %}
+                                  <textarea class="modalforminput" name="stock_reject_input" placeholder="Type here" maxlength="100"></textarea>
+                                <div class="modal-footer">
+                                  <button class="form-button" type="submit">Reject</button>
+                                </form>
+                              </div>
+                            
+                            </div>
+                            
+                          
+                          </div>
+
+                          
+
+
+
+                            {% elif x.request_status == "Delivered" or x.request_status == "Approved, give to user" %}
+                            <div class="tooltip">
+                              <a href="complete/{{ x.id }}"><i class="fa-solid fa-face-smile" style="color:rgb(255, 213, 40); text-align: right;"></i></a>
+                              <span class="tooltiptext">Handed to user</span>
+                            </div>                            {% else %}
+                            <div class="tooltip">
+                              <a href="delivered/{{ x.id }}"><i class="fa-solid fa-box" style="color: rgb(173, 135, 98); text-align: right;"></i></a>
+                              <span class="tooltiptext">Delivered</span>
+                            </div>                    
+                            
+                            {% endif %}
+                          </td>
+                
+                          {% empty %}
+                          <td colspan="6">Yay, no requests</td>
+                      
+                          </tr>
+                
+                          {% endfor %}
+                
+                      </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            made with ❤️ by james
+        </footer>
+
+    </div>
+
+<script>
+
+function openMobNav() {
+  var x = document.getElementById("mobileburgerlinks");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+
+// Get the modal
+var modal = document.getElementById("myModal");
+var modal2 = document.getElementById("myModal2");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+var btn2 = document.getElementById("myBtn2");
+
+// When the user clicks on the button, open the modal
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+btn2.onclick = function() {
+  modal2.style.display = "block";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+window.onclick = function(event2) {
+  if (event2.target == modal2) {
+    modal2.style.display = "none";
+  }
+}
+
+</script>
+    
+</body>
+
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/02312187f3.js" crossorigin="anonymous"></script>
+    <title>Home</title>
+
+</head>
+
+<style>
+  i:hover {
+    opacity: 0.7;
+  }
+</style>
+
+<body style="background-color: black; color: white;">
+
+  <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link " aria-current="page" href="{% url 'home' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'request' %}">Request</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'stock' %}">Stock Count</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'log' %}">Log</a>
+          </li>
+        </div>
+        </ul>
+        <form action="" method="POST" style="text-align: center;" data-bs-theme="dark">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col">
+              <input type="text" name="stock_item" class="form-control" placeholder="Add new item" maxlength="30">
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-primary btn-sm">Add Item</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+<div class="container-fluid">
+
+  <div class="row">
+
+    <div class="col" style="background-color:rgb(129, 129, 129);">
+
+      <p style="text-align: center;">Items in stock</p>
+    
+      <table class="table table-dark table-hover table-dark" style="width: 100%">
+
+        <tr>
+          <th>Stock Item</th>
+          <th>Stock Quantity</th>
+          <th>Action</th>
+        </tr>
+      
+        {% for x in stock_count_table %}
+      
+        <tr>
+      
+          <td>
+      
+            <form action="updatestockname/{{ x.id }}" method="POST" style="width: 10em; text-align: center;" data-bs-theme="dark">
+            {% csrf_token %}
+            <input name="stock_item" class="form-control" value="{{ x.stock_item }}" style="border: none;">
+            </form>
+      
+          </td>
+      
+          <td>
+      
+            <form action="updatequantity/{{ x.id }}" method="POST" style="width: 10em; text-align: center;" data-bs-theme="dark">
+            {% csrf_token %}
+            <input type="number" name="stock_item_quantity" class="form-control" value="{{ x.stock_item_quantity }}" style="border: none;">
+            </form>
+      
+          </td>
+      
+          <td>
+      
+            <a href="delete/{{ x.id }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="fa-solid fa-circle-xmark" style="color: red; text-align: right;"></i></a>
+      
+          </td>
+      
+        </tr>
+
+        {% empty %}
+        <td colspan="3">Nothing is in stock</td>
+      
+        {% endfor %}
+      
+      </table>
+
+    </div>
+
+    <div class="col" style="background-color:rgb(129, 129, 129);">
+
+      <p style="text-align: center;">Items needing approval</p>
+    
+      <table class="table table-dark table-hover table-dark" style="width: 100%">
+        <tr>
+          
+          <th>Date Requested</th>
+          <th>Requester</th>
+          <th>Equipment Requested</th>
+          <th>Quantity Requested</th>
+          <th>Status</th>
+          <th>Action</th>
+      
+        </tr>
+      
+        {% for x in stock_request_table %}
+      
+        <tr>
+
+          <td>
+            {{ x.request_date }}
+          </td>
+      
+          <td>
+            {{ x.request_requestor }}
+          </td>
+      
+          <td>
+            {{ x.request_item }}
+          </td>
+      
+          <td>
+            {{ x.request_quantity }}
+          </td>
+
+          <td>
+            {{ x.request_status }}
+          </td>
+      
+          <td>
+            {% if x.request_status == "Pending" %}
+            <span data-bs-toggle="modal" data-bs-target="#bsm1">
+            <a href="#" onclick="return false;" data-bs-toggle="tooltip" data-bs-placement="top" title="Approve"><i class="fa-solid fa-circle-check" style="color: rgb(0, 255, 98); text-align: right;"></i></a>
+            </span> 
+
+            <div class="modal fade" id="bsm1" tabindex="-1" aria-labelledby="bsm1label" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content" style="background-color: black;">
+                  <div class="modal-body">
+                    Please select one of the following
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-success" onclick="location.href='approveinstock/{{ x.id }}'">Item is in stock in the office</button>
+                    <button type="button" class="btn btn-success" onclick="location.href='approve/{{ x.id }}'">Item needs to be ordered</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <span data-bs-toggle="modal" data-bs-target="#bsm2">
+              <a href="#" onclick="return false;" data-bs-toggle="tooltip" data-bs-placement="top" title="Reject"><i class="fa-solid fa-circle-xmark" style="color:red; text-align: right;"></i></a>
+              </span> 
+  
+              <div class="modal fade" id="bsm2" tabindex="-1" aria-labelledby="bsm2label" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content" style="background-color: black;">
+                    <div class="modal-body">
+                      Please input reason for rejecting
+                    </div>
+                    <form action="reject/{{ x.id }}" method="POST" style="text-align: center;" data-bs-theme="dark">
+                      {% csrf_token %}
+                      <textarea name="stock_reject_input" class="form-control" placeholder="Type here" maxlength="100"></textarea>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-danger">Reject</button>
+                    </form>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        
+            {% elif x.request_status == "Delivered" or x.request_status == "Approved, give to user" %}
+            <a href="complete/{{ x.id }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Handed to user"><i class="fa-solid fa-face-smile" style="color:rgb(255, 213, 40); text-align: right;"></i></a>
+            {% else %}
+            <a href="delivered/{{ x.id }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Delivered"><i class="fa-solid fa-box" style="color: rgb(173, 135, 98); text-align: right;"></i></a>
+
+
+            <!---<a href="approve/{{ x.id }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Approve"><i class="fa-solid fa-circle-check" style="color: rgb(0, 255, 98); text-align: right;"></i></a> --->
+            
+            {% endif %}
+          </td>
+
+          {% empty %}
+          <td colspan="6">Yay, no requests</td>
+      
+          </tr>
+
+          {% endfor %}
+
+      </table>
+    
+    </div>
+  </div>
+</div>
+
+    <div class="fixed-bottom text-center">
+      <footer>
+        made with ❤️ by james
+      </footer>
+    </div>
+
+    <script>
+      // Initialize tooltips
+      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+      })
+      </script>
+
+  </body>
+  </html>

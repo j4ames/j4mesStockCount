@@ -1,0 +1,190 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/02312187f3.js" crossorigin="anonymous"></script>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div class="topbartitle">
+            <h1>Stock Count</h1>
+            <!--
+            <div class="notificaitonbell" id="myBtn">
+                <i class="fa-solid fa-bell"></i>
+                <p>1</p>
+            </div>
+            !-->    
+        
+                <div class="mobileburger">
+                    <a href="javascript:void(0);" class="icon" onclick="openMobNav()">
+                        <i class="fa-solid fa-bars"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mobileburgerlinks">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'request' %}">Request</a>
+        <a href="{% url 'stock' %}">Stock List</a>
+        <a href="{% url 'log' %}">Log</a>
+        <a href="{% url 'tools' %}">Tools</a>
+        <a href="{% url 'settings' %}">Settings</a>
+        <a href="{% url 'signout' %}">Sign Out</a>
+    </div>
+
+    <div class="sidebar">
+        <nav class="sidenav">
+            <ul>
+                <div>
+                    <a href="{% url 'home' %}">
+                        <li>
+                            <div class="sidebarcontainer">
+                                <div class="listicon">
+                                    <i class="fa-solid fa-house"></i>
+                                </div>
+                                <div class="listtext">
+                                    Home
+                                </div>
+                            </div>
+                        </li>
+                    </a>
+
+                    <a href="{% url 'request' %}">
+                        <li>
+                            <div class="sidebarcontainer">
+                                <div class="listicon">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                </div>
+                                <div class="listtext">
+                                    Request
+                                </div>
+                            </div>
+                        </li>
+                    </a>
+
+                    <a href="{% url 'stock' %}">
+                        <li>
+                            <div class="sidebarcontainer">
+                                <div class="listicon">
+                                    <i class="fa-solid fa-box"></i>
+                                </div>
+                                <div class="listtext">
+                                    Stock List
+                                </div>
+                            </div>
+                        </li>
+                    </a>
+
+
+                    <a href="{% url 'log' %}">
+                        <li>
+                            <div class="sidebarcontainer">
+                                <div class="listicon">
+                                    <i class="fa-solid fa-eye"></i>
+                                </div>
+                                <div class="listtext">
+                                    Log
+                                </div>
+                            </div>
+                        </li>
+                    </a>
+
+                    <a href="{% url 'tools' %}">
+                        <li>
+                            <div class="sidebarcontainer">
+                                <div class="listicon">
+                                    <i class="fa-solid fa-wrench"></i>
+                                </div>
+                                <div class="listtext">
+                                    Tools
+                                </div>
+                            </div>
+                        </li>
+                    </a>
+                </div>
+
+                <div>
+                <a href="{% url 'settings' %}">
+                    <li class="bottom">
+                        <div class="sidebarcontainer">
+                            <div class="listicon">
+                                <i class="fa-solid fa-gear"></i>
+                            </div>
+                            <div class="listtext">
+                                Settings
+                            </div>
+                        </div>
+                    </li>
+                </a>
+
+                <a href="{% url 'signout' %}">
+                    <li class="bottom">
+                        <div class="sidebarcontainer">
+                            <div class="listicon">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div class="listtext">
+                                Sign Out
+                            </div>
+                        </div>
+                    </li>
+                </a>
+
+                </div>
+
+            </ul>
+
+        </nav>
+    </div>
+
+
+    <div class="row">
+
+        <div class="maintitle">
+
+            <h2>Tools</h2>
+
+        </div>
+
+        <div class="container">
+
+            <div class="singleinsidecontainer">
+                <form action="" method="POST" class="forminside">
+                    {% csrf_token %}
+                      <label>Add equipment</label>
+                      <input type="text" name="stock_item" placeholder="Add new item" maxlength="30">
+                      <button type="submit">Add item</button>
+                  </form>
+            </div>
+
+        </div>
+
+        <footer>
+            made with ❤️ by james
+        </footer>
+
+    </div>
+
+<script>
+function openMobNav() {
+  var x = document.getElementById("mobileburgerlinks");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+</script>
+    
+</body>
+
+</html>
